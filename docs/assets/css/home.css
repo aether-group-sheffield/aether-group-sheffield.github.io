@@ -1,3 +1,165 @@
-.home-page {
-    background: #f4f7fb;
+/* Reset some default browser spacing */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Main page styling */
+html, body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
+    line-height: 1.6;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Fixed animated background layer */
+#background-animation {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+}
+
+/* Canvas fills the background container */
+#canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Foreground page content */
+.page-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* Navigation bar - not sticky */
+.topnav {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 1.5rem 2rem;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(4px);
+}
+
+    .topnav a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1rem;
+        transition: opacity 0.2s ease;
+    }
+
+        .topnav a:hover {
+            opacity: 0.7;
+        }
+
+/* Hero section takes full screen height */
+.title {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+}
+
+    .title h1 {
+        font-size: clamp(3rem, 8vw, 6rem);
+        line-height: 1.1;
+    }
+
+/* About section */
+.about {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 5rem 2rem 3rem 2rem;
+    text-align: center;
+}
+
+    .about h2 {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .about p {
+        font-size: 1.1rem;
+        color: #e2e8f0;
+    }
+
+/* Quick links section */
+.quick-links {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 2rem 5rem 2rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+/* Individual link cards */
+.link-card {
+    display: block;
+    text-decoration: none;
+    color: white;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.25s ease, background 0.25s ease;
+}
+
+    .link-card:hover {
+        transform: translateY(-6px);
+        background: rgba(255, 255, 255, 0.14);
+    }
+
+    .link-card img {
+        width: 100%;
+        height: 240px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .link-card p {
+        padding: 1rem;
+        font-size: 1.1rem;
+        font-weight: bold;
+        text-align: center;
+    }
+
+/* Mobile / tablet responsiveness */
+@media (max-width: 900px) {
+    .quick-links {
+        grid-template-columns: 1fr;
+    }
+
+    .topnav {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .hero h1 {
+        font-size: clamp(2.5rem, 10vw, 4rem);
+    }
+
+    .about h2 {
+        font-size: 1.7rem;
+    }
+
+    .about p {
+        font-size: 1rem;
+    }
 }
