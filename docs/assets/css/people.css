@@ -1,0 +1,44 @@
+
+.people-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 10px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+
+.person-card {
+    border-width: 2px;
+    border-style:solid;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px;
+}
+.primary {
+    border-color: #2B075A;
+    background-color: #D5CDDE;
+}
+.secondary {
+    border-color:#1FB7EA;
+    background-color: #D2F1FB;
+}
+.tertiary {
+    border-color:#06D6A0;
+    background-color: #CDF7EC;
+}
+
+.profile-photo{
+    width: 100%;
+}
+
+.person-links {
+    display:grid;
+    grid-template-columns: repeat(5,1fr);
+    grid-column-gap:10px;
+    
+}
+.person-links img {
+    width:100%;
+    align-content:center;
+}
