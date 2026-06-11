@@ -1,2 +1,4 @@
 .DS_Store
 .claude/
+# Brand source assets (PSDs etc.) — web-ready copies live in assets/img/
+logos/
