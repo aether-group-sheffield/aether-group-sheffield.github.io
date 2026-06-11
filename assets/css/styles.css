@@ -461,7 +461,7 @@ ul { padding-left: 1.2em; }
 /* ---- Card grids ---- */
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
   gap: 1.5rem;
 }
 
@@ -496,6 +496,7 @@ a.card:hover { box-shadow: var(--shadow-lift); }
 .icon-primary { background: var(--primary-t20); color: var(--primary); }
 .icon-secondary { background: var(--secondary-t20); color: var(--secondary-s40); }
 .icon-tertiary { background: var(--tertiary-t20); color: var(--tertiary-s40); }
+.icon-dark { background: var(--primary); color: var(--primary-t05); }
 
 .card h3 { margin-bottom: 0.4em; }
 .card p { color: var(--ink-soft); font-size: 0.98rem; margin-bottom: 0; margin-inline: auto; }
@@ -632,6 +633,7 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
 .tag-ai { background: var(--secondary-t20); color: var(--secondary-s40); }
 .tag-devices { background: var(--tertiary-t20); color: var(--tertiary-s40); }
 .tag-control { background: var(--primary-t20); color: var(--primary); }
+.tag-hardware { background: var(--primary); color: var(--primary-t05); }
 
 .theme-body h3 { font-size: 1.1rem; margin-top: 1.6em; }
 .theme-body ul { color: var(--ink-soft); }
