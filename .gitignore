@@ -1,7 +1,4 @@
-_site
-.sass-cache
-.jekyll-cache
-.jekyll-metadata
-vendor
-Gemfile.lock
-/.vs
+.DS_Store
+.claude/
+# Brand source assets (PSDs etc.) — web-ready copies live in assets/img/
+logos/
