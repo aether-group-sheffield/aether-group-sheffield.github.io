@@ -166,6 +166,19 @@ ul { padding-left: 1.2em; }
   padding-inline: var(--gutter);
 }
 
+/* Visually hidden but available to screen readers */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* Skip link */
 .skip-link {
   position: absolute;
@@ -778,6 +791,136 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
   font-size: 0.98rem;
 }
 .notice p { margin: 0; color: inherit; }
+
+/* ==========================================================================
+   Image placeholder — a labelled box standing in for a photo that the team
+   will drop in later. Swap the whole .media-placeholder for an <img>.
+   ========================================================================== */
+.media-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--primary-t05);
+  border: 1px dashed var(--primary-t40);
+  color: var(--primary-t60);
+  text-align: center;
+  padding: 1rem;
+}
+.media-placeholder svg { width: 2rem; height: 2rem; }
+.media-placeholder span { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.02em; }
+
+/* ==========================================================================
+   News / updates page
+   ========================================================================== */
+.news-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(20rem, 100%), 1fr));
+  gap: 1.5rem;
+}
+.news-item {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+.news-media {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+}
+.news-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.news-body { padding: 1.5rem 1.6rem; display: flex; flex-direction: column; flex: 1; }
+.news-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.8rem;
+  margin-bottom: 0.7rem;
+}
+.news-date { font-size: 0.85rem; font-weight: 700; color: var(--tertiary-s60); }
+.news-cat {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: var(--primary-t20);
+  color: var(--primary);
+}
+.news-item h3 { font-size: 1.2rem; margin-bottom: 0.4em; }
+.news-item p { color: var(--ink-soft); font-size: 0.96rem; }
+.news-item .news-link { margin-top: auto; font-weight: 700; font-size: 0.94rem; padding-top: 0.6rem; }
+
+/* Group/team photo banner */
+.team-photo {
+  margin: 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+.team-photo .media-placeholder,
+.team-photo img { aspect-ratio: 21 / 9; width: 100%; }
+.team-photo img { object-fit: cover; display: block; }
+
+/* ==========================================================================
+   Photo gallery — activities and group life
+   ========================================================================== */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(15rem, 100%), 1fr));
+  gap: 1rem;
+}
+.gallery figure {
+  margin: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+.gallery .media-placeholder,
+.gallery img { aspect-ratio: 4 / 3; width: 100%; }
+.gallery img { object-fit: cover; display: block; }
+.gallery figcaption {
+  padding: 0.7rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+/* ==========================================================================
+   Newsletter sign-up band
+   ========================================================================== */
+.newsletter {
+  background: var(--tertiary-t05);
+  border: 1px solid var(--tertiary-t20);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.8rem, 4vw, 2.6rem);
+  text-align: center;
+}
+.newsletter h2 { margin-bottom: 0.3em; }
+.newsletter p { color: var(--ink-soft); margin-inline: auto; }
+.newsletter-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  justify-content: center;
+  margin-top: 1.4rem;
+}
+.newsletter-form input[type="email"] {
+  flex: 1 1 18rem;
+  max-width: 22rem;
+  font: inherit;
+  padding: 0.8rem 1.1rem;
+  border-radius: 999px;
+  border: 2px solid var(--primary-t40);
+  background: var(--surface);
+  color: var(--ink);
+}
+.newsletter-form input[type="email"]:focus-visible { outline-offset: 1px; border-color: var(--primary); }
 
 /* ==========================================================================
    Contact page
