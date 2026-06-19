@@ -2,3 +2,6 @@
 .claude/
 # Brand source assets (PSDs etc.) — web-ready copies live in assets/img/
 logos/
+
+# Internal brand source doc — not for the public site
+AETHER Group Style Guide.docx
