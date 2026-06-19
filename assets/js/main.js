@@ -73,4 +73,40 @@
     );
     revealEls.forEach(function (el) { observer.observe(el); });
   }
+
+  /* ---- Publications theme filter ---- */
+  var filterButtons = document.querySelectorAll(".pub-filter");
+  if (filterButtons.length) {
+    var pubItems = document.querySelectorAll(".pub-item");
+    var yearGroups = document.querySelectorAll(".pub-year-group");
+    var emptyMsg = document.querySelector(".pub-empty");
+
+    function applyFilter(theme) {
+      pubItems.forEach(function (item) {
+        var themes = (item.getAttribute("data-theme") || "").split(/\s+/);
+        var show = theme === "all" || themes.indexOf(theme) !== -1;
+        item.hidden = !show;
+      });
+      // hide year groups that have no visible items, and any total-empty state
+      var anyVisible = false;
+      yearGroups.forEach(function (group) {
+        var visible = group.querySelectorAll(".pub-item:not([hidden])").length;
+        group.hidden = visible === 0;
+        if (visible) { anyVisible = true; }
+      });
+      if (emptyMsg) { emptyMsg.hidden = anyVisible; }
+    }
+
+    filterButtons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        filterButtons.forEach(function (b) {
+          b.classList.remove("is-active");
+          b.setAttribute("aria-pressed", "false");
+        });
+        btn.classList.add("is-active");
+        btn.setAttribute("aria-pressed", "true");
+        applyFilter(btn.getAttribute("data-filter"));
+      });
+    });
+  }
 })();
