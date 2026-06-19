@@ -471,12 +471,13 @@ ul { padding-left: 1.2em; }
 .section-head.center { margin-inline: auto; text-align: center; }
 .section-head.center p { margin-inline: auto; }
 
-/* Interior page label (sits above the page title on dark page heroes) */
+/* Section label. Primary is the lead colour (style guide); the bright
+   tertiary is reserved for the dark page heroes, set below. */
 .eyebrow {
   display: inline-block;
   font-size: 0.95rem;
   font-weight: 700;
-  color: var(--tertiary-s60);
+  color: var(--primary);
   margin-bottom: 0.9rem;
 }
 
@@ -576,7 +577,7 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
   border: 2px solid var(--secondary);
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--secondary-s40);
+  color: var(--primary);
   margin-bottom: 1rem;
 }
 .step .step-num::before { content: counter(step); }
@@ -677,14 +678,19 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
 /* ==========================================================================
    Research page
    ========================================================================== */
+/* A coloured spine per theme (in the theme's own colour) breaks up the
+   otherwise-uniform sections and gives the page a throughline as you scroll. */
 .theme-section {
   display: grid;
   grid-template-columns: minmax(0, 0.42fr) minmax(0, 0.58fr);
   gap: clamp(2rem, 5vw, 4rem);
-  padding-block: clamp(3rem, 6vw, 5rem);
-  border-bottom: 1px solid var(--line);
+  padding: clamp(2.5rem, 5vw, 4rem) 0 clamp(2.5rem, 5vw, 4rem) clamp(1.25rem, 3vw, 2.25rem);
+  border-left: 5px solid var(--line);
 }
-.theme-section:last-of-type { border-bottom: none; }
+#artificial-intelligence { border-left-color: var(--secondary); }
+#medical-devices { border-left-color: var(--tertiary); }
+#automatic-control { border-left-color: var(--primary); }
+#hardware { border-left-color: var(--primary-t60); }
 .theme-side { position: sticky; top: 6.5rem; align-self: start; }
 .theme-tag {
   display: inline-block;
@@ -696,13 +702,15 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
   border-radius: 999px;
   margin-bottom: 1rem;
 }
-.tag-ai { background: var(--secondary-t20); color: var(--secondary-s40); }
-.tag-devices { background: var(--tertiary-t20); color: var(--tertiary-s40); }
-.tag-control { background: var(--primary-t20); color: var(--primary); }
+/* Filled with the theme's true brand colour (no muddy shades), with text
+   chosen for contrast. */
+.tag-ai { background: var(--secondary); color: var(--primary-s20); }
+.tag-devices { background: var(--tertiary); color: var(--primary-s20); }
+.tag-control { background: var(--primary); color: var(--primary-t05); }
 .tag-hardware { background: var(--primary); color: var(--primary-t05); }
 
 .theme-body h3 { font-size: 1.1rem; margin-top: 1.6em; }
-.theme-body ul { color: var(--ink-soft); }
+.theme-body ul { color: var(--ink); }
 .theme-body li { margin-bottom: 0.45em; }
 
 @media (max-width: 56rem) {
@@ -736,7 +744,7 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
 .person-feature .portrait img { width: 62%; }
 .person-role {
   font-weight: 700;
-  color: var(--tertiary-s60);
+  color: var(--primary);
   margin-bottom: 1em;
 }
 
@@ -761,7 +769,8 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
 .person-card .avatar {
   width: 6.5rem;
   height: 6.5rem;
-  border-radius: 50%;
+  /* rounded square, matching the leadership portraits (not circles) */
+  border-radius: var(--radius-md);
   margin-inline: auto;
   margin-bottom: 1.1rem;
   background: var(--primary-t20);
@@ -797,23 +806,70 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
 
 .join-card {
   background: var(--tertiary-t05);
-  border: 2px dashed var(--tertiary-s80);
+  border: 2px dashed var(--primary-t40);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
-.join-card h3 { color: var(--tertiary-s40); }
+.join-card h3 { color: var(--primary); }
 
 /* ==========================================================================
    Publications page
    ========================================================================== */
+/* Sticky toolbar: theme filters + year jump-nav */
+.pub-toolbar {
+  position: sticky;
+  top: 4.5rem;
+  z-index: 20;
+  background: rgba(244, 243, 247, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 0.9rem 1rem;
+  margin-bottom: 1.5rem;
+}
+.pub-filters { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.pub-filter {
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0.3rem 0.85rem;
+  border-radius: 999px;
+  border: 2px solid var(--primary-t40);
+  background: var(--surface);
+  color: var(--ink);
+}
+.pub-filter:hover { border-color: var(--primary); }
+.pub-filter.is-active { background: var(--primary); border-color: var(--primary); color: var(--primary-t05); }
+.pub-filter.badge-ai.is-active { background: var(--secondary); border-color: var(--secondary); color: var(--primary-s20); }
+.pub-filter.badge-devices.is-active { background: var(--tertiary); border-color: var(--tertiary); color: var(--primary-s20); }
+.pub-filter.badge-hardware.is-active { background: var(--primary); border-color: var(--primary); color: var(--primary-t05); }
+.pub-filter.badge-clinical.is-active { background: var(--accent-2); border-color: var(--accent-2); color: var(--primary-s20); }
+.pub-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.9rem;
+  margin-top: 0.8rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.85rem;
+}
+.pub-jump a { font-weight: 700; text-decoration: none; }
+.pub-jump a:hover { text-decoration: underline; }
+
+.pub-year-group { scroll-margin-top: 8rem; }
 .pub-year {
+  position: sticky;
+  top: 8.5rem;
+  z-index: 10;
   font-size: 1.3rem;
+  background: var(--bg);
   border-bottom: 2px solid var(--tertiary);
-  display: inline-block;
-  padding-bottom: 0.2em;
-  margin-top: 2em;
+  padding: 0.3em 0 0.2em;
+  margin: 1.5em 0 0.8em;
 }
 .pub-list { list-style: none; padding: 0; margin: 0; }
 .pub-item {
@@ -827,6 +883,7 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
 .pub-item .pub-title { font-weight: 700; color: var(--primary); font-size: 1.05rem; margin-bottom: 0.25em; }
 .pub-item .pub-authors { font-size: 0.95rem; margin-bottom: 0.25em; }
 .pub-item .pub-venue { font-size: 0.9rem; color: var(--ink-soft); font-style: italic; margin-bottom: 0.6em; }
+.pub-doi { margin: 0.6em 0 0; }
 .pub-badges { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .pub-badge {
   font-size: 0.78rem;
@@ -834,6 +891,13 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
   padding: 0.25rem 0.7rem;
   border-radius: 999px;
 }
+/* Theme badges filled with true brand colours (matching the research tags) */
+.badge-ai { background: var(--secondary); color: var(--primary-s20); }
+.badge-devices { background: var(--tertiary); color: var(--primary-s20); }
+.badge-control { background: var(--primary); color: var(--primary-t05); }
+.badge-hardware { background: var(--primary); color: var(--primary-t05); }
+.badge-clinical { background: var(--accent-2); color: var(--primary-s20); }
+.pub-empty { text-align: center; color: var(--ink-soft); font-weight: 700; padding: 2rem 0; }
 
 .notice {
   background: var(--secondary-t20);
@@ -894,7 +958,7 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
   gap: 0.5rem 0.8rem;
   margin-bottom: 0.7rem;
 }
-.news-date { font-size: 0.85rem; font-weight: 700; color: var(--tertiary-s60); }
+.news-date { font-size: 0.85rem; font-weight: 700; color: var(--primary); }
 .news-cat {
   font-size: 0.72rem;
   font-weight: 700;
@@ -989,7 +1053,19 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
   align-items: flex-start;
   margin-bottom: 1.4rem;
 }
-.contact-detail svg { flex-shrink: 0; width: 1.5rem; height: 1.5rem; color: var(--tertiary-s60); margin-top: 0.2rem; }
+.contact-detail svg { flex-shrink: 0; width: 1.5rem; height: 1.5rem; color: var(--primary); margin-top: 0.2rem; }
+.recruit-status {
+  margin: 1.75rem auto 0;
+  max-width: none;
+  text-align: center;
+  background: var(--tertiary-t20);
+  border: 1px solid var(--tertiary);
+  border-radius: var(--radius-md);
+  padding: 0.9rem 1.4rem;
+  color: var(--ink);
+  font-size: 0.96rem;
+}
+.recruit-status strong { color: var(--primary); }
 .contact-detail h3 { font-size: 1rem; margin-bottom: 0.2em; }
 .contact-detail p { margin-bottom: 0; color: var(--ink-soft); font-size: 0.97rem; }
 
