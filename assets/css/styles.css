@@ -68,9 +68,9 @@
   --ink-soft: #3D3354;
   --surface: #FFFFFF;
   --line: var(--primary-t20);
-  /* Hyperlinks use accent 1; shaded for contrast on the 5% tint background */
-  --link: var(--accent-1-s80);
-  --link-hover: var(--accent-1-s60);
+  /* Hyperlinks use the primary accent (accent 1); hover uses accent 3 */
+  --link: var(--accent-1);
+  --link-hover: var(--accent-3);
   /* Dark surfaces: 20% shade background, 5% tint text minimum */
   --surface-dark: var(--primary-s80);
   --ink-on-dark: var(--primary-t05);
@@ -84,8 +84,8 @@
   --shadow-soft: 0 2px 6px rgba(43, 7, 90, 0.06), 0 18px 40px -18px rgba(43, 7, 90, 0.18);
   --shadow-lift: 0 4px 10px rgba(43, 7, 90, 0.08), 0 28px 56px -20px rgba(43, 7, 90, 0.28);
 
-  --wrap: 72rem;
-  --gutter: clamp(1.25rem, 4vw, 2.5rem);
+  --wrap: 90rem;
+  --gutter: clamp(1.25rem, 5vw, 4rem);
 }
 
 /* OpenDyslexic mode — toggled on <html> by JS, persisted in localStorage.
@@ -356,18 +356,20 @@ ul { padding-left: 1.2em; }
 }
 .btn-ghost:hover { background: var(--primary-t20); color: var(--primary); }
 
-/* On dark surfaces */
+/* On dark surfaces — a matched pair: a solid tertiary button and its
+   outline counterpart, so two adjacent buttons share one colour identity. */
 .btn-bright {
   background: var(--tertiary);
   color: var(--primary-s20);
 }
 .btn-bright:hover { background: var(--tertiary-s80); color: var(--primary-s20); }
 
-.btn-light {
-  background: var(--primary-t05);
-  color: var(--primary);
+.btn-outline-bright {
+  background: transparent;
+  color: var(--tertiary);
+  border-color: var(--tertiary);
 }
-.btn-light:hover { background: var(--primary-t20); color: var(--primary); }
+.btn-outline-bright:hover { background: var(--tertiary); color: var(--primary-s20); }
 
 /* ==========================================================================
    Hero
@@ -414,13 +416,22 @@ ul { padding-left: 1.2em; }
   margin-top: 2rem;
 }
 
-.hero-art { text-align: center; }
-.hero-art img { width: min(100%, 28rem); }
+/* The logo is never recoloured; instead it sits on a light panel so the
+   full-colour mark reads against the dark hero (style guide: never place the
+   logo on a background of its own colour). */
+.hero-art {
+  display: flex;
+  justify-content: center;
+  background: var(--primary-t05);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.75rem, 4vw, 3rem);
+}
+.hero-art img { width: min(100%, 22rem); }
 
 @media (max-width: 56rem) {
   .hero .wrap { grid-template-columns: 1fr; }
-  .hero-art { order: -1; }
-  .hero-art img { width: min(60vw, 17rem); }
+  .hero-art { order: -1; justify-self: center; max-width: 24rem; }
+  .hero-art img { width: min(55vw, 16rem); }
 }
 
 /* ==========================================================================
@@ -506,16 +517,18 @@ a.card:hover { box-shadow: var(--shadow-lift); }
   margin-bottom: 1.2rem;
 }
 .card-icon svg { width: 1.8rem; height: 1.8rem; }
+/* All four chips share one treatment — a brand-colour glyph on its own tint
+   (icons are decorative/aria-hidden). No shades, none filled "dark". */
 .icon-primary { background: var(--primary-t20); color: var(--primary); }
-.icon-secondary { background: var(--secondary-t20); color: var(--secondary-s40); }
-.icon-tertiary { background: var(--tertiary-t20); color: var(--tertiary-s40); }
-.icon-dark { background: var(--primary); color: var(--primary-t05); }
+.icon-secondary { background: var(--secondary-t20); color: var(--secondary); }
+.icon-tertiary { background: var(--tertiary-t20); color: var(--tertiary); }
 
 .card h3 { margin-bottom: 0.4em; }
 .card p { color: var(--ink-soft); font-size: 0.98rem; margin-bottom: 0; margin-inline: auto; }
 
 .card-more {
-  margin-top: 1.2rem;
+  margin-top: auto;
+  padding-top: 1.2rem;
   font-weight: 700;
   color: var(--link);
   font-size: 0.95rem;
@@ -523,24 +536,13 @@ a.card:hover { box-shadow: var(--shadow-lift); }
 a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; text-underline-offset: 0.2em; }
 
 /* ---- Numbered approach steps ----
-   Centred cards with numbered circles joined by a connecting line, so the
-   numbers read as an explicit step-by-step sequence. */
+   Numbered cards read as a sequence, with an arrow between each card showing
+   the throughline. The arrow sits in the gap, centred on the whole card. */
 .steps {
-  position: relative;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
   gap: 1.5rem;
   counter-reset: step;
-}
-/* connector: runs behind the cards at circle height, visible in the gaps */
-.steps::before {
-  content: "";
-  position: absolute;
-  left: 10%;
-  right: 10%;
-  top: 3.3rem;
-  height: 2px;
-  background: var(--secondary-t40);
 }
 .step {
   position: relative;
@@ -551,9 +553,19 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
   box-shadow: var(--shadow-soft);
   text-align: center;
 }
-.step::before {
+/* arrow into the next step (horizontal on wide screens) */
+.step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -1.5rem;
+  width: 1.5rem;
+  height: 2px;
+  background: var(--secondary);
+  transform: translateY(-50%);
+}
+.step .step-num {
   counter-increment: step;
-  content: counter(step);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -561,17 +573,51 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
   height: 2.6rem;
   border-radius: 50%;
   background: var(--secondary-t20);
-  border: 2px solid var(--secondary-t40);
+  border: 2px solid var(--secondary);
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--secondary-s40);
   margin-bottom: 1rem;
 }
+.step .step-num::before { content: counter(step); }
 .step h3 { font-size: 1.2rem; }
 .step p { color: var(--ink-soft); font-size: 0.98rem; margin-bottom: 0; margin-inline: auto; }
 
+/* arrowhead on the connector */
+.step:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -1.5rem;
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 7px solid var(--secondary);
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
 @media (max-width: 56rem) {
-  .steps::before { display: none; }
+  /* stacked: arrow points downward into the next step */
+  .step:not(:last-child)::after {
+    top: auto;
+    right: 50%;
+    bottom: -1.5rem;
+    width: 2px;
+    height: 1.5rem;
+    transform: translateX(50%);
+  }
+  .step:not(:last-child)::before {
+    top: auto;
+    right: 50%;
+    bottom: -1.5rem;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 7px solid var(--secondary);
+    border-bottom: 0;
+    transform: translateX(50%);
+  }
 }
 
 /* ---- Audience strip ---- */
@@ -580,19 +626,26 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
   grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
   gap: 1.25rem;
 }
+/* Centred cards; the colour bar moves to the top and uses the three brand
+   colours plus an accent (not tints/shades). Links pin to the bottom so they
+   line up across cards regardless of text length. */
 .audience {
-  border-left: 4px solid var(--tertiary);
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  border-top: 4px solid var(--primary);
   background: var(--surface);
   border-radius: var(--radius-md);
-  padding: 1.4rem 1.5rem;
+  padding: 1.6rem 1.5rem;
   box-shadow: var(--shadow-soft);
 }
-.audience:nth-child(2) { border-left-color: var(--secondary); }
-.audience:nth-child(3) { border-left-color: var(--primary-t60); }
-.audience:nth-child(4) { border-left-color: var(--tertiary-s80); }
+.audience:nth-child(2) { border-top-color: var(--secondary); }
+.audience:nth-child(3) { border-top-color: var(--tertiary); }
+.audience:nth-child(4) { border-top-color: var(--accent-1); }
 .audience h3 { font-size: 1.05rem; margin-bottom: 0.35em; }
-.audience p { font-size: 0.94rem; color: var(--ink-soft); margin-bottom: 0.6em; }
-.audience a { font-weight: 700; font-size: 0.94rem; }
+.audience p { font-size: 0.94rem; color: var(--ink-soft); margin-bottom: 0.6em; margin-inline: auto; }
+.audience a { font-weight: 700; font-size: 0.94rem; text-decoration: none; margin-top: auto; }
+.audience a:hover { text-decoration: underline; text-underline-offset: 0.2em; }
 
 /* ==========================================================================
    CTA band
@@ -955,9 +1008,9 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
   gap: clamp(2rem, 5vw, 4rem);
   padding-block: clamp(2.5rem, 6vw, 4rem);
 }
-.footer-brand { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1rem; }
-.footer-brand img { width: 48px; height: 48px; }
-.footer-brand span { font-weight: 700; font-size: 1.25rem; letter-spacing: normal; color: var(--ink-on-dark); }
+.footer-brand { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+.footer-brand img { width: 84px; height: 84px; }
+.footer-brand span { font-weight: 700; font-size: 1.6rem; letter-spacing: normal; color: var(--ink-on-dark); }
 .footer-main p { font-size: 0.94rem; max-width: 30rem; }
 
 .footer-main h3 {
@@ -967,8 +1020,11 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
 }
 .footer-main ul { list-style: none; margin: 0; padding: 0; }
 .footer-main li { margin-bottom: 0.55em; }
-.footer-main a { color: var(--accent-2); font-size: 0.97rem; }
-.footer-main a:hover { color: var(--accent-2-t40); }
+/* Links use the primary accent; visited links use the secondary accent;
+   hover lifts to a lighter accent-2 tint (per brand feedback). */
+.footer-main a { color: var(--accent-1); font-size: 0.97rem; }
+.footer-main a:visited { color: var(--accent-2); }
+.footer-main a:hover { color: #FFCF80; }
 
 .footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.12);
