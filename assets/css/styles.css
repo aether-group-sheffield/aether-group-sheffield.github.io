@@ -985,27 +985,76 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
 .team-photo img { object-fit: cover; display: block; }
 
 /* ==========================================================================
-   Photo gallery — activities and group life
+   Photo carousel — activities and group life
+   Large cards in a horizontal scroll-snap track, so new photos extend
+   sideways instead of growing the page downwards.
    ========================================================================== */
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(15rem, 100%), 1fr));
-  gap: 1rem;
+.carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
 }
-.gallery figure {
+.carousel-track {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  /* proximity, not mandatory: mandatory fights programmatic scrolling
+     (button clicks) in several browsers and can yank the track back */
+  scroll-snap-type: x proximity;
+  scroll-behavior: smooth;
+  padding: 0.25rem 0.25rem 1rem;
+  /* thin brand scrollbar as a secondary affordance */
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-t40) transparent;
+  flex: 1;
+  min-width: 0;
+}
+.carousel-track figure {
+  flex: 0 0 min(38rem, 88%);
   margin: 0;
+  scroll-snap-align: center;
   border-radius: var(--radius-md);
   overflow: hidden;
   border: 1px solid var(--line);
   background: var(--surface);
+  box-shadow: var(--shadow-soft);
 }
-.gallery .media-placeholder,
-.gallery img { aspect-ratio: 4 / 3; width: 100%; }
-.gallery img { object-fit: cover; display: block; }
-.gallery figcaption {
-  padding: 0.7rem 0.9rem;
-  font-size: 0.85rem;
+.carousel-track .media-placeholder,
+.carousel-track img { aspect-ratio: 4 / 3; width: 100%; }
+.carousel-track img { object-fit: cover; display: block; }
+.carousel-track figcaption {
+  padding: 0.85rem 1.1rem;
+  font-size: 0.92rem;
   color: var(--ink-soft);
+}
+.carousel-btn {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.9rem;
+  height: 2.9rem;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+  background: var(--surface);
+  color: var(--primary);
+  cursor: pointer;
+}
+.carousel-btn svg { width: 1.3rem; height: 1.3rem; }
+.carousel-btn:hover:not(:disabled) { background: var(--primary); color: var(--primary-t05); }
+.carousel-btn:disabled { opacity: 0.35; cursor: default; border-color: var(--primary-t40); }
+
+@media (max-width: 48rem) {
+  /* buttons overlay the track on small screens to save width */
+  .carousel { gap: 0; }
+  .carousel-btn { position: absolute; z-index: 2; top: 50%; transform: translateY(-50%); }
+  .carousel-prev { left: 0.4rem; }
+  .carousel-next { right: 0.4rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-track { scroll-behavior: auto; }
 }
 
 /* ==========================================================================
