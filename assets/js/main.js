@@ -109,4 +109,42 @@
       });
     });
   }
+
+  /* ---- Photo carousel (Life in the group) ---- */
+  document.querySelectorAll(".carousel").forEach(function (carousel) {
+    var track = carousel.querySelector(".carousel-track");
+    var prev = carousel.querySelector(".carousel-prev");
+    var next = carousel.querySelector(".carousel-next");
+    if (!track || !prev || !next) { return; }
+
+    function step() {
+      var fig = track.querySelector("figure");
+      return fig ? fig.getBoundingClientRect().width + 20 : track.clientWidth * 0.9;
+    }
+
+    function maxScroll() {
+      return track.scrollWidth - track.clientWidth;
+    }
+
+    function setStates(position) {
+      prev.disabled = position <= 2;
+      next.disabled = position >= maxScroll() - 2;
+    }
+
+    function updateButtons() { setStates(track.scrollLeft); }
+
+    function go(direction) {
+      // predict the destination so the buttons respond immediately,
+      // rather than waiting for the smooth scroll to finish
+      var target = Math.max(0, Math.min(maxScroll(), track.scrollLeft + direction * step()));
+      track.scrollBy({ left: direction * step() });
+      setStates(target);
+    }
+
+    prev.addEventListener("click", function () { go(-1); });
+    next.addEventListener("click", function () { go(1); });
+    track.addEventListener("scroll", updateButtons, { passive: true });
+    window.addEventListener("resize", updateButtons);
+    updateButtons();
+  });
 })();
