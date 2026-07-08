@@ -74,20 +74,25 @@
     revealEls.forEach(function (el) { observer.observe(el); });
   }
 
-  /* ---- Publications theme filter ---- */
-  var filterButtons = document.querySelectorAll(".pub-filter");
-  if (filterButtons.length) {
+  /* ---- Publications filters: theme AND year both filter the results ---- */
+  var themeButtons = document.querySelectorAll(".pub-filter[data-filter]");
+  var yearButtons = document.querySelectorAll(".pub-filter[data-year]");
+  if (themeButtons.length) {
     var pubItems = document.querySelectorAll(".pub-item");
     var yearGroups = document.querySelectorAll(".pub-year-group");
     var emptyMsg = document.querySelector(".pub-empty");
+    var activeTheme = "all";
+    var activeYear = "all";
 
-    function applyFilter(theme) {
+    function applyFilters() {
       pubItems.forEach(function (item) {
         var themes = (item.getAttribute("data-theme") || "").split(/\s+/);
-        var show = theme === "all" || themes.indexOf(theme) !== -1;
-        item.hidden = !show;
+        var group = item.closest(".pub-year-group");
+        var year = group ? group.id.replace("y-", "") : "";
+        var themeOk = activeTheme === "all" || themes.indexOf(activeTheme) !== -1;
+        var yearOk = activeYear === "all" || year === activeYear;
+        item.hidden = !(themeOk && yearOk);
       });
-      // hide year groups that have no visible items, and any total-empty state
       var anyVisible = false;
       yearGroups.forEach(function (group) {
         var visible = group.querySelectorAll(".pub-item:not([hidden])").length;
@@ -97,54 +102,84 @@
       if (emptyMsg) { emptyMsg.hidden = anyVisible; }
     }
 
-    filterButtons.forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        filterButtons.forEach(function (b) {
-          b.classList.remove("is-active");
-          b.setAttribute("aria-pressed", "false");
+    function wire(buttons, set) {
+      buttons.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          buttons.forEach(function (b) {
+            b.classList.remove("is-active");
+            b.setAttribute("aria-pressed", "false");
+          });
+          btn.classList.add("is-active");
+          btn.setAttribute("aria-pressed", "true");
+          set(btn);
+          applyFilters();
         });
-        btn.classList.add("is-active");
-        btn.setAttribute("aria-pressed", "true");
-        applyFilter(btn.getAttribute("data-filter"));
       });
-    });
+    }
+    wire(themeButtons, function (btn) { activeTheme = btn.getAttribute("data-filter"); });
+    wire(yearButtons, function (btn) { activeYear = btn.getAttribute("data-year"); });
   }
 
-  /* ---- Photo carousel (Life in the group) ---- */
+  /* ---- Photo carousel (Life in the group) ----
+     One photo per view; prev/next and dots page exactly one slide. */
   document.querySelectorAll(".carousel").forEach(function (carousel) {
     var track = carousel.querySelector(".carousel-track");
     var prev = carousel.querySelector(".carousel-prev");
     var next = carousel.querySelector(".carousel-next");
     if (!track || !prev || !next) { return; }
+    var slides = track.querySelectorAll("figure");
 
-    function step() {
-      var fig = track.querySelector("figure");
-      return fig ? fig.getBoundingClientRect().width + 20 : track.clientWidth * 0.9;
+    // single-photo carousels need no navigation at all
+    if (slides.length < 2) {
+      carousel.classList.add("no-nav");
+      return;
     }
 
-    function maxScroll() {
-      return track.scrollWidth - track.clientWidth;
+    // build the dot indicators
+    var dots = document.createElement("div");
+    dots.className = "carousel-dots";
+    dots.setAttribute("role", "tablist");
+    slides.forEach(function (_, i) {
+      var dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = "carousel-dot" + (i === 0 ? " is-active" : "");
+      dot.setAttribute("aria-label", "Go to photo " + (i + 1) + " of " + slides.length);
+      dot.addEventListener("click", function () { goTo(i); });
+      dots.appendChild(dot);
+    });
+    carousel.appendChild(dots);
+
+    var current = 0;
+
+    function slideWidth() {
+      var fig = slides[0];
+      var gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 0;
+      return fig.getBoundingClientRect().width + gap;
     }
 
-    function setStates(position) {
-      prev.disabled = position <= 2;
-      next.disabled = position >= maxScroll() - 2;
+    function setStates(index) {
+      current = Math.max(0, Math.min(slides.length - 1, index));
+      prev.disabled = current === 0;
+      next.disabled = current === slides.length - 1;
+      dots.querySelectorAll(".carousel-dot").forEach(function (d, i) {
+        d.classList.toggle("is-active", i === current);
+      });
     }
 
-    function updateButtons() { setStates(track.scrollLeft); }
-
-    function go(direction) {
-      // predict the destination so the buttons respond immediately,
-      // rather than waiting for the smooth scroll to finish
-      var target = Math.max(0, Math.min(maxScroll(), track.scrollLeft + direction * step()));
-      track.scrollBy({ left: direction * step() });
-      setStates(target);
+    function goTo(index) {
+      index = Math.max(0, Math.min(slides.length - 1, index));
+      track.scrollTo({ left: index * slideWidth() });
+      setStates(index);
     }
 
-    prev.addEventListener("click", function () { go(-1); });
-    next.addEventListener("click", function () { go(1); });
-    track.addEventListener("scroll", updateButtons, { passive: true });
-    window.addEventListener("resize", updateButtons);
-    updateButtons();
+    prev.addEventListener("click", function () { goTo(current - 1); });
+    next.addEventListener("click", function () { goTo(current + 1); });
+    // keep state in sync when the user scrolls/swipes the track directly
+    track.addEventListener("scroll", function () {
+      var index = Math.round(track.scrollLeft / slideWidth());
+      if (index !== current) { setStates(index); }
+    }, { passive: true });
+    window.addEventListener("resize", function () { goTo(current); });
+    setStates(0);
   });
 })();

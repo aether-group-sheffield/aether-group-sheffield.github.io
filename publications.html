@@ -54,17 +54,26 @@
     <section class="section">
       <div class="wrap">
 
-        <!-- Filter by theme; year jump-nav. Rebuilt by /tmp/rebuild_pubs.py -->
+        <!-- Filters: theme AND year chips both filter the results -->
         <div class="pub-toolbar reveal">
           <div class="pub-filters" role="group" aria-label="Filter publications by theme">
+            <span class="pub-filter-label">Theme:</span>
             <button type="button" class="pub-filter is-active" data-filter="all" aria-pressed="true">All</button>
             <button type="button" class="pub-filter badge-ai" data-filter="ai" aria-pressed="false">Artificial Intelligence</button>
             <button type="button" class="pub-filter badge-devices" data-filter="devices" aria-pressed="false">Medical Devices</button>
             <button type="button" class="pub-filter badge-hardware" data-filter="hardware" aria-pressed="false">Hardware</button>
             <button type="button" class="pub-filter badge-clinical" data-filter="clinical" aria-pressed="false">Clinical Study</button>
           </div>
-          <nav class="pub-jump" aria-label="Jump to year">
-<a href="#y-2026">2026</a> <a href="#y-2025">2025</a> <a href="#y-2023">2023</a> <a href="#y-2022">2022</a> <a href="#y-2021">2021</a> <a href="#y-2020">2020</a> </nav>
+          <div class="pub-filters pub-years" role="group" aria-label="Filter publications by year">
+            <span class="pub-filter-label">Year:</span>
+            <button type="button" class="pub-filter pub-year-filter is-active" data-year="all" aria-pressed="true">All</button>
+            <button type="button" class="pub-filter pub-year-filter" data-year="2026" aria-pressed="false">2026</button>
+            <button type="button" class="pub-filter pub-year-filter" data-year="2025" aria-pressed="false">2025</button>
+            <button type="button" class="pub-filter pub-year-filter" data-year="2023" aria-pressed="false">2023</button>
+            <button type="button" class="pub-filter pub-year-filter" data-year="2022" aria-pressed="false">2022</button>
+            <button type="button" class="pub-filter pub-year-filter" data-year="2021" aria-pressed="false">2021</button>
+            <button type="button" class="pub-filter pub-year-filter" data-year="2020" aria-pressed="false">2020</button>
+          </div>
         </div>
 
         <div id="pub-results">
@@ -188,8 +197,8 @@
           <h2>Want to know more about our work?</h2>
           <p>We're happy to share preprints, talk through results, or discuss where the research is heading.</p>
           <div class="hero-actions">
-            <a class="btn btn-bright" href="mailto:aether-group@sheffield.ac.uk">Email the group</a>
-            <a class="btn btn-outline-bright" href="/research.html">Browse research themes</a>
+            <a class="btn btn-bright" href="/contact.html">Get in touch</a>
+            <a class="btn btn-outline-bright" href="mailto:aether-group@sheffield.ac.uk">Email the group</a>
           </div>
         </div>
       </div>
