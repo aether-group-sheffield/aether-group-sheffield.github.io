@@ -65,8 +65,14 @@
   /* Semantic tokens */
   --bg: var(--primary-t05);
   --ink: var(--primary-s20);
-  --ink-soft: #3D3354;
-  --surface: #FFFFFF;
+  /* muted text uses the palette's 80% primary tint (no off-palette colours) */
+  --ink-soft: var(--primary-t80);
+  /* Card surfaces are the primary purple on the 5% tint page background
+     (per brand feedback: no pure white; the contrast makes the cards pop) */
+  --surface: var(--primary);
+  /* light text tokens for content sitting on the purple cards */
+  --card-ink: var(--primary-t05);
+  --card-ink-soft: var(--primary-t20);
   --line: var(--primary-t20);
   /* Hyperlinks: accent 1 (pink) as link, accent 3 (orange) as hover.
      On the dark footer, visited = orange and hover = yellow (accent 2). */
@@ -482,7 +488,7 @@ ul { padding-left: 1.2em; }
    Sections
    ========================================================================== */
 .section { padding-block: clamp(3.5rem, 8vw, 6.5rem); }
-.section-alt { background: #fff; border-block: 1px solid var(--line); }
+.section-alt { background: var(--bg); border-block: 1px solid var(--line); }
 .section-tint { background: var(--tertiary-t05); border-block: 1px solid var(--tertiary-t20); }
 
 .section-head { max-width: 46rem; margin-bottom: clamp(2rem, 4vw, 3.25rem); }
@@ -557,17 +563,23 @@ a.card:hover { box-shadow: var(--shadow-lift); }
 .icon-tertiary { background: var(--tertiary-t20); color: var(--tertiary); }
 .icon-accent1 { background: #FCDAE2; color: var(--accent-1); }
 
-.card h3 { margin-bottom: 0.4em; }
-.card p { color: var(--ink-soft); font-size: 0.98rem; margin-bottom: 0; margin-inline: auto; }
+.card h3 { margin-bottom: 0.4em; color: var(--card-ink); }
+.card p { color: var(--card-ink-soft); font-size: 0.98rem; margin-bottom: 1.2rem; margin-inline: auto; }
 
+/* Card links are buttons: tertiary fill with primary text on the purple
+   cards, inverting on hover (matches the site button pair). */
 .card-more {
   margin-top: auto;
-  padding-top: 1.2rem;
+  display: inline-block;
+  padding: 0.5rem 1.15rem;
+  border-radius: 999px;
+  border: 2px solid var(--tertiary);
+  background: var(--tertiary);
+  color: var(--primary);
   font-weight: 700;
-  color: var(--link);
   font-size: 0.95rem;
 }
-a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; text-underline-offset: 0.2em; }
+a.card:hover .card-more { background: transparent; color: var(--tertiary); }
 
 /* ---- Numbered approach steps ----
    Numbered cards read as a sequence, echoing the blue of the arrows in the
@@ -609,8 +621,8 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
   margin-bottom: 1rem;
 }
 .step .step-num::before { content: counter(step); }
-.step h3 { font-size: 1.2rem; }
-.step p { color: var(--ink-soft); font-size: 0.98rem; margin-bottom: 0; margin-inline: auto; }
+.step h3 { font-size: 1.2rem; color: var(--card-ink); }
+.step p { color: var(--card-ink-soft); font-size: 0.98rem; margin-bottom: 0; margin-inline: auto; }
 
 /* stacked: arrow points downward into the next step */
 .step:not(:last-child)::after {
@@ -673,19 +685,34 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
   display: flex;
   flex-direction: column;
   text-align: center;
-  border-top: 4px solid var(--primary);
+  /* bars skip primary (invisible on the purple cards) and run on through
+     the palette: secondary, tertiary, accent 1, accent 2 */
+  border-top: 4px solid var(--secondary);
   background: var(--surface);
   border-radius: var(--radius-md);
   padding: 1.6rem 1.5rem;
   box-shadow: var(--shadow-soft);
 }
-.audience:nth-child(2) { border-top-color: var(--secondary); }
-.audience:nth-child(3) { border-top-color: var(--tertiary); }
-.audience:nth-child(4) { border-top-color: var(--accent-1); }
-.audience h3 { font-size: 1.05rem; margin-bottom: 0.35em; }
-.audience p { font-size: 0.94rem; color: var(--ink-soft); margin-bottom: 0.6em; margin-inline: auto; }
-.audience a { font-weight: 700; font-size: 0.94rem; text-decoration: none; margin-top: auto; }
-.audience a:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+.audience:nth-child(2) { border-top-color: var(--tertiary); }
+.audience:nth-child(3) { border-top-color: var(--accent-1); }
+.audience:nth-child(4) { border-top-color: var(--accent-2); }
+.audience h3 { font-size: 1.05rem; margin-bottom: 0.35em; color: var(--card-ink); }
+.audience p { font-size: 0.94rem; color: var(--card-ink-soft); margin-bottom: 1em; margin-inline: auto; }
+/* button treatment, matching .card-more */
+.audience a {
+  margin-top: auto;
+  align-self: center;
+  display: inline-block;
+  padding: 0.45rem 1.05rem;
+  border-radius: 999px;
+  border: 2px solid var(--tertiary);
+  background: var(--tertiary);
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+.audience a:hover { background: transparent; color: var(--tertiary); }
 
 /* ==========================================================================
    CTA band
@@ -782,9 +809,11 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
   overflow: hidden;
 }
 .person-feature .portrait img { width: 62%; }
+.person-feature h3 { color: var(--card-ink); }
+.person-feature p { color: var(--card-ink-soft); }
 .person-role {
   font-weight: 700;
-  color: var(--primary);
+  color: var(--card-ink);
   margin-bottom: 1em;
 }
 
@@ -820,9 +849,9 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
   overflow: hidden;
 }
 .person-card .avatar img { width: 60%; }
-.person-card h3 { font-size: 1.1rem; margin-bottom: 0.2em; }
-.person-card .person-role { font-size: 0.9rem; margin-bottom: 0.7em; }
-.person-card p { font-size: 0.92rem; color: var(--ink-soft); margin-inline: auto; }
+.person-card h3 { font-size: 1.1rem; margin-bottom: 0.2em; color: var(--card-ink); }
+.person-card .person-role { font-size: 0.9rem; margin-bottom: 0.7em; color: var(--card-ink-soft); }
+.person-card p { font-size: 0.92rem; color: var(--card-ink-soft); margin-inline: auto; }
 
 .person-links {
   display: flex;
@@ -841,18 +870,18 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
   border: 1px solid var(--line);
   color: var(--primary);
 }
-.person-links a:hover { background: var(--primary); color: #fff; }
+.person-links a:hover { background: var(--tertiary); color: var(--primary); }
 .person-links svg { width: 1.15rem; height: 1.15rem; }
 
 .join-card {
-  background: var(--tertiary-t05);
-  border: 2px dashed var(--primary-t40);
+  background: var(--surface);
+  border: 2px dashed var(--tertiary);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
-.join-card h3 { color: var(--primary); }
+.join-card h3 { color: var(--card-ink); }
 .join-card p { text-align: center; width: 100%; }
 .join-card .btn { margin-inline: auto; }
 
@@ -881,7 +910,7 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
 .pub-filter-label {
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--primary);
+  color: var(--card-ink);
   margin-right: 0.2rem;
 }
 /* chips mirror the research theme tags: tinted at rest, full colour when
@@ -902,7 +931,9 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
 .pub-filter.badge-hardware { background: #FCDAE2; }
 .pub-filter.badge-clinical { background: #FFF6E0; }
 .pub-filter:hover { filter: brightness(0.94); }
-.pub-filter.is-active { background: var(--primary); color: var(--primary-t05); }
+/* active "All" lights up to the 5% tint (a primary fill would vanish
+   against the purple toolbar) */
+.pub-filter.is-active { background: var(--primary-t05); color: var(--primary); }
 .pub-filter.badge-ai.is-active { background: var(--secondary); color: var(--primary); }
 .pub-filter.badge-devices.is-active { background: var(--tertiary); color: var(--primary); }
 .pub-filter.badge-hardware.is-active { background: var(--accent-1); color: var(--primary); }
@@ -937,10 +968,24 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
   margin-bottom: 1rem;
   box-shadow: var(--shadow-soft);
 }
-.pub-item .pub-title { font-weight: 700; color: var(--primary); font-size: 1.05rem; margin-bottom: 0.25em; }
-.pub-item .pub-authors { font-size: 0.95rem; margin-bottom: 0.25em; }
-.pub-item .pub-venue { font-size: 0.9rem; color: var(--ink-soft); font-style: italic; margin-bottom: 0.6em; }
-.pub-doi { margin: 0.6em 0 0; }
+.pub-item .pub-title { font-weight: 700; color: var(--card-ink); font-size: 1.05rem; margin-bottom: 0.25em; }
+.pub-item .pub-authors { font-size: 0.95rem; color: var(--card-ink); margin-bottom: 0.25em; }
+.pub-item .pub-venue { font-size: 0.9rem; color: var(--card-ink-soft); font-style: italic; margin-bottom: 0.6em; }
+.pub-doi { margin: 0.8em 0 0; }
+/* button treatment, matching .card-more */
+.pub-doi a {
+  display: inline-block;
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  border: 2px solid var(--tertiary);
+  background: var(--tertiary);
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+.pub-doi a:hover, .pub-doi a:visited:hover { background: transparent; color: var(--tertiary); }
+.pub-doi a:visited { color: var(--primary); }
 .pub-badges { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .pub-badge {
   font-size: 0.78rem;
@@ -1016,7 +1061,7 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
   gap: 0.5rem 0.8rem;
   margin-bottom: 0.7rem;
 }
-.news-date { font-size: 0.85rem; font-weight: 700; color: var(--primary); }
+.news-date { font-size: 0.85rem; font-weight: 700; color: var(--card-ink); }
 .news-cat {
   font-size: 0.72rem;
   font-weight: 700;
@@ -1027,9 +1072,23 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
   background: var(--primary-t20);
   color: var(--primary);
 }
-.news-item h3 { font-size: 1.2rem; margin-bottom: 0.4em; }
-.news-item p { color: var(--ink-soft); font-size: 0.96rem; }
-.news-item .news-link { margin-top: auto; font-weight: 700; font-size: 0.94rem; padding-top: 0.6rem; }
+.news-item h3 { font-size: 1.2rem; margin-bottom: 0.4em; color: var(--card-ink); }
+.news-item p { color: var(--card-ink-soft); font-size: 0.96rem; }
+.news-item .news-link { margin-top: auto; padding-top: 0.8rem; }
+/* button treatment, matching .card-more */
+.news-link a {
+  display: inline-block;
+  padding: 0.45rem 1.05rem;
+  border-radius: 999px;
+  border: 2px solid var(--tertiary);
+  background: var(--tertiary);
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+.news-link a:hover { background: transparent; color: var(--tertiary); }
+.news-link a:visited { color: var(--primary); }
 
 /* Group/team photo banner */
 .team-photo {
@@ -1086,8 +1145,11 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
 .carousel-track figcaption {
   padding: 0.85rem 1.1rem;
   font-size: 0.92rem;
-  color: var(--ink-soft);
+  color: var(--card-ink-soft);
 }
+/* caption links (e.g. SHaRC) need the dark-surface treatment */
+.carousel-track figcaption a { color: var(--tertiary); }
+.carousel-track figcaption a:hover { color: var(--accent-2); }
 .carousel-btn {
   flex: 0 0 auto;
   display: inline-flex;
@@ -1097,7 +1159,7 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
   height: 2.9rem;
   border-radius: 50%;
   border: 2px solid var(--primary);
-  background: var(--surface);
+  background: var(--bg);
   color: var(--primary);
   cursor: pointer;
 }
@@ -1165,7 +1227,7 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
   padding: 0.8rem 1.1rem;
   border-radius: 999px;
   border: 2px solid var(--primary-t40);
-  background: var(--surface);
+  background: var(--bg);
   color: var(--ink);
 }
 .newsletter-form input[type="email"]:focus-visible { outline-offset: 1px; border-color: var(--primary); }
