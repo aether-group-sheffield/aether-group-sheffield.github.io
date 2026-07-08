@@ -65,7 +65,8 @@
   /* Semantic tokens */
   --bg: var(--primary-t05);
   --ink: var(--primary-s20);
-  --ink-soft: #3D3354;
+  /* muted text uses the palette's 80% primary tint (no off-palette colours) */
+  --ink-soft: var(--primary-t80);
   --surface: #FFFFFF;
   --line: var(--primary-t20);
   /* Hyperlinks: accent 1 (pink) as link, accent 3 (orange) as hover.
@@ -558,16 +559,21 @@ a.card:hover { box-shadow: var(--shadow-lift); }
 .icon-accent1 { background: #FCDAE2; color: var(--accent-1); }
 
 .card h3 { margin-bottom: 0.4em; }
-.card p { color: var(--ink-soft); font-size: 0.98rem; margin-bottom: 0; margin-inline: auto; }
+.card p { color: var(--ink-soft); font-size: 0.98rem; margin-bottom: 1.2rem; margin-inline: auto; }
 
+/* Card links are buttons (accent link text fails on the white cards):
+   primary purple fill with tertiary text, inverting on hover. */
 .card-more {
   margin-top: auto;
-  padding-top: 1.2rem;
+  display: inline-block;
+  padding: 0.5rem 1.15rem;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--tertiary);
   font-weight: 700;
-  color: var(--link);
   font-size: 0.95rem;
 }
-a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; text-underline-offset: 0.2em; }
+a.card:hover .card-more { background: var(--tertiary); color: var(--primary); }
 
 /* ---- Numbered approach steps ----
    Numbered cards read as a sequence, echoing the blue of the arrows in the
@@ -683,9 +689,21 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
 .audience:nth-child(3) { border-top-color: var(--tertiary); }
 .audience:nth-child(4) { border-top-color: var(--accent-1); }
 .audience h3 { font-size: 1.05rem; margin-bottom: 0.35em; }
-.audience p { font-size: 0.94rem; color: var(--ink-soft); margin-bottom: 0.6em; margin-inline: auto; }
-.audience a { font-weight: 700; font-size: 0.94rem; text-decoration: none; margin-top: auto; }
-.audience a:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+.audience p { font-size: 0.94rem; color: var(--ink-soft); margin-bottom: 1em; margin-inline: auto; }
+/* button treatment, matching .card-more */
+.audience a {
+  margin-top: auto;
+  align-self: center;
+  display: inline-block;
+  padding: 0.45rem 1.05rem;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--tertiary);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+.audience a:hover { background: var(--tertiary); color: var(--primary); }
 
 /* ==========================================================================
    CTA band
@@ -940,7 +958,20 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
 .pub-item .pub-title { font-weight: 700; color: var(--primary); font-size: 1.05rem; margin-bottom: 0.25em; }
 .pub-item .pub-authors { font-size: 0.95rem; margin-bottom: 0.25em; }
 .pub-item .pub-venue { font-size: 0.9rem; color: var(--ink-soft); font-style: italic; margin-bottom: 0.6em; }
-.pub-doi { margin: 0.6em 0 0; }
+.pub-doi { margin: 0.8em 0 0; }
+/* button treatment, matching .card-more */
+.pub-doi a {
+  display: inline-block;
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--tertiary);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+.pub-doi a:hover, .pub-doi a:visited:hover { background: var(--tertiary); color: var(--primary); }
+.pub-doi a:visited { color: var(--tertiary); }
 .pub-badges { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .pub-badge {
   font-size: 0.78rem;
@@ -1029,7 +1060,20 @@ a.card:hover .card-more { color: var(--link-hover); text-decoration: underline; 
 }
 .news-item h3 { font-size: 1.2rem; margin-bottom: 0.4em; }
 .news-item p { color: var(--ink-soft); font-size: 0.96rem; }
-.news-item .news-link { margin-top: auto; font-weight: 700; font-size: 0.94rem; padding-top: 0.6rem; }
+.news-item .news-link { margin-top: auto; padding-top: 0.8rem; }
+/* button treatment, matching .card-more */
+.news-link a {
+  display: inline-block;
+  padding: 0.45rem 1.05rem;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--tertiary);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+.news-link a:hover { background: var(--tertiary); color: var(--primary); }
+.news-link a:visited { color: var(--tertiary); }
 
 /* Group/team photo banner */
 .team-photo {
